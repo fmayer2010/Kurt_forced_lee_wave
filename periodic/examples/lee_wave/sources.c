@@ -130,7 +130,7 @@ void MomentumSource(REAL **usource, gridT *grid, physT *phys, propT *prop) {
 
 }
 
-void KurtSsource(REAL **usource, gridT *grid, physT *phys, propT *prop, MPI_Comm comm) {
+void KurtSource(REAL **usource, gridT *grid, physT *phys, propT *prop, MPI_Comm comm) {
 /* Kurt style forcing to maintain constant volume averaged velocity (and reach steady state fast)
 Steps:
 1) compute volume averaged velocity from u_hat, the velocity currently stored in phys->u[j][k]
