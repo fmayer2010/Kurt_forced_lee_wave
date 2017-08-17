@@ -2302,6 +2302,9 @@ static void HorizontalSource(gridT *grid, physT *phys, propT *prop,
       phys->utmp[j][k]+=fab1*phys->Cn_U[j][k];
   }
 
+  // update utmp with Kurt forcing
+  KurtSource(phys->utmp,grid,phys,prop,comm);
+
 //  // check to make sure we don't have a blow-up
 //  for(j=0;j<grid->Ne;j++) 
 //    for(k=grid->etop[j];k<grid->Nke[j];k++) 

@@ -130,6 +130,67 @@ void MomentumSource(REAL **usource, gridT *grid, physT *phys, propT *prop) {
 
 }
 
+void KurtSsource(REAL **usource, gridT *grid, physT *phys, propT *prop, MPI_Comm comm) {
+/* Kurt style forcing to maintain constant volume averaged velocity (and reach steady state fast)
+Steps:
+1) compute volume averaged velocity from u_hat, the velocity currently stored in phys->u[j][k]
+2) compute forcing necessary to make the volume average of u_n+1 = u0
+3) add forcing times dt to usource[j][k]
+*/
+int i, iptr, j, jptr, nc1, nc2, k; 
+REAL uvol = 0, cellvol = 0, cumvol = 0, myuvol=0, mycumvol=0, u0=0.01, S;
+// for(jptr=grid->edgedist[0];jptr<grid->edgedist[1];jptr++) {
+//   j = grid->edgep[jptr];
+//   nc1 = grid->grad[2*j];
+//   nc1 = grid->grad[2*j+1];
+//   cellarea = 0.5*(grid->Ac[nc1]+grid->Ac[nc2]);
+//   depth_face = 0;
+//   for(k=grid->etop[j];k<grid->Nke[j];k++) {
+//     uvol+= phys->u[j][k]*grid->dzf[j][k];
+//     depth_face += grid->dzf[j][k];
+//   }
+//   cumvol+=depth_face;
+// }
+
+for(iptr=grid->celldist[0];iptr<grid->celldist[1];iptr++) {
+  i = grid->cellp[iptr];
+  for(k=grid->ctop[i];k<grid->Nk[i];k++){
+      cellvol = grid->Ac[i]*grid->dzz[i][k];
+      myuvol+=phys->uc[i][k]*cellvol;
+      mycumvol+=cellvol;
+      // cellvol=0; //not necessary
+  }
+}
+
+ MPI_Reduce(&mycumvol,&(cumvol),1,MPI_DOUBLE,MPI_SUM,0,comm);
+ MPI_Bcast(&cumvol,1,MPI_DOUBLE,0,comm);
+ MPI_Reduce(&myuvol,&(uvol),1,MPI_DOUBLE,MPI_SUM,0,comm);
+ MPI_Bcast(&uvol,1,MPI_DOUBLE,0,comm);
+ 
+uvol/=cumvol;
+// rather than assigning each cell to receive uniform forcing (u0-uvol), account for hill's presence by
+// assigning each vertical column of cells to receive unifom depth integrated forcing ((u0-uvol)*D0/D(x))
+
+for(jptr=grid->edgedist[0];jptr<grid->edgedist[1];jptr++){
+  j = grid->edgep[jptr];
+
+  // nc1 = grid->grad[2*j];
+  // nc2 = grid->grad[2*j+1];
+  // xe = 0.5*(grid->xv[nc1]+grid->xv[nc2]);
+  // ye = grid->ye[j];
+  // S = (u0-uvol)*D/ReturnDepth(xe,ye)/prop->dt;
+  
+  S = (u0-uvol)/prop->dt;
+  //note that this does not account for variable depth... could instead calculate column average velocity and do a S on that
+
+  for(k=grid->etop[j];k<grid->Nke[j];k++){
+    usource[j][k]+=(prop->dt*S)*grid->n1[j];
+  }
+}
+
+
+}
+
 /*
  * Function: SaltSource
  * --------------------
