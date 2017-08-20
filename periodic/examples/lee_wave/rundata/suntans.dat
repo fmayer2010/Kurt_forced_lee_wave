@@ -43,7 +43,7 @@ nsteps 		100000	1000 240000 480000    # Number of steps
 ntout   	1000	50	# How often to output data
 ntprog   		5	# How often to report progress (in %)
 ntconserve 		1	# How often to output conserved data
-nonhydrostatic		0	# 0 = hydrostatic, 1 = nonhydrostatic
+nonhydrostatic		1	# 0 = hydrostatic, 1 = nonhydrostatic
 AB			3	# AB3
 cgsolver		1	# 0 = GS, 1 = CG
 maxiters		1000	# Maximum number of CG iterations
