@@ -1571,6 +1571,13 @@ void Solve(gridT *grid, physT *phys, propT *prop, int myproc, int numprocs, MPI_
       ISendRecvCellData3D(phys->vc,grid,myproc,comm);
     }
 
+
+    // update u with Kurt forcing
+    KurtSource(grid,phys,prop,comm);
+    // redo compute uc and vc
+    ComputeUC(phys->uc, phys->vc, phys,grid, myproc, prop->interp,prop->subgrid);
+    ComputeVC(phys->uc, phys->vc, phys,grid, myproc, prop->interp,prop->subgrid);
+
     // Adjust the velocity field in the new cells if the newcells variable is set 
     // to 1 in suntans.dat.  Once this is done, send the interprocessor 
     // u-velocities to the neighboring processors.
@@ -2301,9 +2308,6 @@ static void HorizontalSource(gridT *grid, physT *phys, propT *prop,
     for(k=grid->etop[j];k<grid->Nke[j];k++)
       phys->utmp[j][k]+=fab1*phys->Cn_U[j][k];
   }
-
-  // update utmp with Kurt forcing
-  KurtSource(phys->utmp,grid,phys,prop,comm);
 
 //  // check to make sure we don't have a blow-up
 //  for(j=0;j<grid->Ne;j++) 

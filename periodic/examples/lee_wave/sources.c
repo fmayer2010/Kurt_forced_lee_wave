@@ -130,7 +130,7 @@ void MomentumSource(REAL **usource, gridT *grid, physT *phys, propT *prop) {
 
 }
 
-void KurtSource(REAL **usource, gridT *grid, physT *phys, propT *prop, MPI_Comm comm) {
+void KurtSource(gridT *grid, physT *phys, propT *prop, MPI_Comm comm) {
 /* Kurt style forcing to maintain constant volume averaged velocity (and reach steady state fast)
 Steps:
 1) compute volume averaged velocity from u_hat, the velocity currently stored in phys->u[j][k]
@@ -138,7 +138,7 @@ Steps:
 3) add forcing times dt to usource[j][k]
 */
 int i, iptr, j, jptr, nc1, nc2, k; 
-REAL uvol = 0, cellvol = 0, cumvol = 0, myuvol=0, mycumvol=0, u0=0.01, S;
+REAL uvol = 0, cellvol = 0, cumvol = 0, myuvol=0, mycumvol=0, u0=0.88, S;
 // for(jptr=grid->edgedist[0];jptr<grid->edgedist[1];jptr++) {
 //   j = grid->edgep[jptr];
 //   nc1 = grid->grad[2*j];
@@ -184,7 +184,7 @@ for(jptr=grid->edgedist[0];jptr<grid->edgedist[1];jptr++){
   //note that this does not account for variable depth... could instead calculate column average velocity and do a S on that
 
   for(k=grid->etop[j];k<grid->Nke[j];k++){
-    usource[j][k]+=(prop->dt*S)*grid->n1[j];
+    phys->u[j][k]+=(prop->dt*S)*grid->n1[j];
   }
 }
 
