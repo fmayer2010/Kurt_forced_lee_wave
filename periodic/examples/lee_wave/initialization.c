@@ -61,7 +61,7 @@ int GetDZ(REAL *dz, REAL depth, REAL localdepth, int Nkmax, int myproc) {
  *
  */
 REAL ReturnDepth(REAL x, REAL y) {
-  REAL Lhill = 1*2500+0*4200, h=50, D = 6911, res = 250, lambda = 0*21870+1*7290, k = 2*PI/lambda;
+  REAL Lhill = 1*10000+0*4200, h=3000, D = 6911, res = 250, lambda = 0*21870+1*7290, k = 2*PI/lambda;
   REAL xc =  0*291600/2+1*25000/2;//10935;//+0*5e4+res/2;
   // Gaussian
   // return D - h*exp(-pow((x-xc)/Lhill,2));
