@@ -241,8 +241,8 @@ REAL ReturnCellWindStress(REAL x, REAL y, int n, REAL dt, int xyswitch){}
 //    }
 
 //    // write these to a file
-//     FILE *ufp = fopen( "up.dat" , "w" );
-//     FILE *wfp = fopen( "wp.dat" , "w" );
+//     FILE *ufp = fopen( "up.dat" , "a" );
+//     FILE *wfp = fopen( "wp.dat" , "a" );
 
 //     Write3DData(up_prime,phys->htmp,prop->mergeArrays,ufp,
 //     "Error outputting up-data!\n",grid,numprocs,myproc,comm);

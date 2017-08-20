@@ -168,8 +168,18 @@ for(iptr=grid->celldist[0];iptr<grid->celldist[1];iptr++) {
  MPI_Bcast(&uvol,1,MPI_DOUBLE,0,comm);
  
 uvol/=cumvol;
-// rather than assigning each cell to receive uniform forcing (u0-uvol), account for hill's presence by
-// assigning each vertical column of cells to receive unifom depth integrated forcing ((u0-uvol)*D0/D(x))
+// rather than assigning each cell to receive uniform forcing (u0-uvol), we could account for hill's presence by
+// assigning each vertical column of cells to receive unifom depth integrated forcing ((u0-uvol)*D0/D(x))... but not doing that above
+
+S = (u0-uvol)/prop->dt;
+//note that this does not account for variable depth... could instead calculate column average velocity and do a S on that
+
+//write S to file if n/ntout is an integer
+if(!(prop->n%prop->ntout) || prop->n==1+prop->nstart || blowup) {
+  FILE *Sfp = fopen( "KurtS.dat" , "a" );
+  fwrite (S , sizeof(REAL), 1, pFile);
+  fclose(pFile);
+}
 
 for(jptr=grid->edgedist[0];jptr<grid->edgedist[1];jptr++){
   j = grid->edgep[jptr];
@@ -179,13 +189,12 @@ for(jptr=grid->edgedist[0];jptr<grid->edgedist[1];jptr++){
   // xe = 0.5*(grid->xv[nc1]+grid->xv[nc2]);
   // ye = grid->ye[j];
   // S = (u0-uvol)*D/ReturnDepth(xe,ye)/prop->dt;
-  
-  S = (u0-uvol)/prop->dt;
-  //note that this does not account for variable depth... could instead calculate column average velocity and do a S on that
 
+  // update u with S/dt
   for(k=grid->etop[j];k<grid->Nke[j];k++){
     phys->u[j][k]+=(prop->dt*S)*grid->n1[j];
   }
+
 }
 
 
