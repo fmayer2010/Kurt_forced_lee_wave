@@ -1576,7 +1576,7 @@ void Solve(gridT *grid, physT *phys, propT *prop, int myproc, int numprocs, MPI_
     KurtSource(grid,phys,prop,comm);
     // redo compute uc and vc
     ComputeUC(phys->uc, phys->vc, phys,grid, myproc, prop->interp,prop->subgrid);
-    ComputeVC(phys->uc, phys->vc, phys,grid, myproc, prop->interp,prop->subgrid);
+  
 
     // Adjust the velocity field in the new cells if the newcells variable is set 
     // to 1 in suntans.dat.  Once this is done, send the interprocessor 
