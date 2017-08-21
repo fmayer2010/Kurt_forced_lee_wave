@@ -176,9 +176,9 @@ S = (u0-uvol)/prop->dt;
 
 //write S to file if n/ntout is an integer
 if(!(prop->n%prop->ntout) || prop->n==1+prop->nstart || blowup) {
-  FILE *Sfp = fopen( "KurtS.dat" , "a" );
-  fwrite (S , sizeof(REAL), 1, pFile);
-  fclose(pFile);
+  FILE *Sfp = fopen( "KurtS.txt" , "a" );
+  fprintf (Sfp,'%e \n', S);
+  fclose(Sfp);
 }
 
 for(jptr=grid->edgedist[0];jptr<grid->edgedist[1];jptr++){
