@@ -175,7 +175,7 @@ S = (u0-uvol)/prop->dt;
 //note that this does not account for variable depth... could instead calculate column average velocity and do a S on that
 
 //write S to file if n/ntout is an integer
-if(!(prop->n%prop->ntout) || prop->n==1+prop->nstart || blowup) {
+if(!(prop->n%prop->ntout) || prop->n==1+prop->nstart) {
   FILE *Sfp = fopen( "KurtS.txt" , "a" );
   fprintf (Sfp,'%e \n', S);
   fclose(Sfp);
