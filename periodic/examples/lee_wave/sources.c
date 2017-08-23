@@ -174,8 +174,14 @@ uvol/=cumvol;
 S = (u0-uvol)/prop->dt;
 //note that this does not account for variable depth... could instead calculate column average velocity and do a S on that
 
-//write S to file if n/ntout is an integer
-if(!(prop->n%prop->ntout) || prop->n==1+prop->nstart) {
+//write S to a new file if this is the first timestep
+if(prop->n==1+prop->nstart) {
+  FILE *Sfp = fopen( "KurtS.txt" , "w" );
+  fprintf (Sfp,"%e \n", S);
+  fclose(Sfp);
+}
+//append S to file if n/ntout is an integer
+if(!(prop->n%prop->ntout)) {
   FILE *Sfp = fopen( "KurtS.txt" , "a" );
   fprintf (Sfp,"%e \n", S);
   fclose(Sfp);

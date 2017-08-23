@@ -61,11 +61,10 @@ int GetDZ(REAL *dz, REAL depth, REAL localdepth, int Nkmax, int myproc) {
  *
  */
 REAL ReturnDepth(REAL x, REAL y) {
-  REAL Lhill = 1*10000+0*4200, h=3000, D = 6911, res = 250, lambda = 0*21870+1*7290, k = 2*PI/lambda;
+  REAL Lhill = 1*5000+0*4200, h=3000, D = 6911, res = 250, lambda = 0*21870+1*7290, k = 2*PI/lambda;
   REAL xc =  0*291600/2+1*25000/2;//10935;//+0*5e4+res/2;
   // Gaussian
-  // return D - h*exp(-pow((x-xc)/Lhill,2));
-   // return D - h/(1+pow((x-xc)/Lhill,2));
+  return D - h*exp(-pow((x-xc)/Lhill,2));
 
   //sin wave with period of 7290m... used with 12-19_sponge where res = 270m
   // return Max(D - h*cos(k*(x)), Max(D - h*cos(k*(x-res/2)), D - h*cos(k*(x+res/2))));
@@ -74,11 +73,11 @@ REAL ReturnDepth(REAL x, REAL y) {
   // Witch of Agnesi (being sure to return the maximum depth for any cell) with tanh to smooth the edges (current settings on tanh are not smnooth!)
   
   // here's one made smooth by adding in the witches next door (it is periodic, afterall!)
-  REAL distant_witches = - (h/(1+pow((x-xc - 2*xc)/Lhill,2)))- (h/(1+pow((x-xc + 2*xc)/Lhill,2)));
-  if(x-xc < 0)
-    return D - h/(1+pow(((x-res/2)-xc)/Lhill,2)) + distant_witches;
-  else 
-    return D - h/(1+pow(((x+res/2)-xc)/Lhill,2)) + distant_witches;
+  // REAL distant_witches = - (h/(1+pow((x-xc - 2*xc)/Lhill,2)))- (h/(1+pow((x-xc + 2*xc)/Lhill,2)));
+  // if(x-xc < 0)
+  //   return D - h/(1+pow(((x-res/2)-xc)/Lhill,2)) + distant_witches;
+  // else 
+  //   return D - h/(1+pow(((x+res/2)-xc)/Lhill,2)) + distant_witches;
 
   // and one made smooth using tanh functions near the boundary. This might violate the linear solution more.
   // if(x-xc < 0)
@@ -133,13 +132,13 @@ REAL ReturnTemperature(REAL x, REAL y, REAL z, REAL depth) {
   dT = N*N*D/alpha/g;
 
   // uniform stratigfication
-  return 20+z*dT/D;
+  // return 20+z*dT/D;
 
   // queney's solution added to uniform stratification
   // return 20+z*dT/D - N*N*h*Lx/alpha/g / (Lx*Lx + (x-xc)*(x-xc)) *(Lx*cos(N*(z+D+h)/U) - (x-xc)*sin(N*(z+D+h)/U));
 
   // no stratification
-  // return 1;
+  return 1;
 }
 
 /*
