@@ -177,7 +177,7 @@ S = (u0-uvol)/prop->dt;
 //write S to file if n/ntout is an integer
 if(!(prop->n%prop->ntout) || prop->n==1+prop->nstart) {
   FILE *Sfp = fopen( "KurtS.txt" , "a" );
-  fprintf (Sfp,'%e \n', S);
+  fprintf (Sfp,"%e \n", S);
   fclose(Sfp);
 }
 
