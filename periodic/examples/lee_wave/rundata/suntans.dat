@@ -1,4 +1,4 @@
-########################################################################
+1;95;0c########################################################################
 #
 #  Input file for SUNTANS.
 #
@@ -6,7 +6,7 @@
 Nkmax			100	# Number of cells in the vertical
 maxFaces		4	# Quad grid
 stairstep		0	# 1 if stair-stepping, 0 if partial-stepping
-rstretch		-1.015	# Stretching factor for vertical grid (1<=rstretch<1.1)
+rstretch		1 -1.015	# Stretching factor for vertical grid (1<=rstretch<1.1)
 CorrectVoronoi		0	# Whether or not to correct Voronoi points
 VoronoiRatio		1	# Adjust the voronoi points by this amount if 1 then = centroid.
 vertgridcorrect 	0 	# Correct vertical grid if Nkmax is too small
@@ -26,7 +26,7 @@ kappa_sH                0       # Horizontal mass diffusivity
 gamma 			1e-4 	# Coefficient of expansivity of temperature.
 kappa_T                 0       # Vertical thermal diffusivity
 kappa_TH                0       # Horizontal thermal diffusivity
-nu 			0 	# Laminar viscosity of water (m^2 s^-1)
+nu 			1e-3 	# Laminar viscosity of water (m^2 s^-1)
 nu_H 			0	# Horizontal laminar viscosity of water (m^2 s^-1)
 tau_T			0 	# Wind shear stress
 z0T	                0.0 	# Top roughness
@@ -37,10 +37,10 @@ CdW			0.0	# Drag coefficient at sidewalls
 computeSediments        0       # if 1 consider sediment model 0 otherwise
 subgrid                 1       #
 turbmodel		0	# Turbulence model (0 for none, 1 for MY25)
-dt 		0.1	5 0.1 1.875 .9375	# Time step
+dt 		0.5	5 0.1 1.875 .9375	# Time step
 Cmax 			10  	# Maximum permissible Courant number
-nsteps 		100000	1000 240000 480000    # Number of steps
-ntout   	1000	50	# How often to output data
+nsteps 		500000	1000 240000 480000    # Number of steps
+ntout   	5000	50	# How often to output data
 ntprog   		5	# How often to report progress (in %)
 ntconserve 		1	# How often to output conserved data
 nonhydrostatic		1	# 0 = hydrostatic, 1 = nonhydrostatic
